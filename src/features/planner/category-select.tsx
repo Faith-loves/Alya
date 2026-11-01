@@ -1,0 +1,5 @@
+"use client";
+import type { TaskCategory } from "@/db/types";
+export const TASK_CATEGORIES: Array<{ value: TaskCategory; label: string }> = [{value:"personal",label:"Personal"},{value:"work",label:"Work"},{value:"career",label:"Career"},{value:"study",label:"Study"},{value:"health",label:"Health"},{value:"faith",label:"Faith"},{value:"errands",label:"Errands"},{value:"other",label:"Other"}];
+export function CategorySelect({ value="other", onChange, id="task-category" }: { value?: TaskCategory; onChange: (value: TaskCategory) => void; id?: string }) { return <div><label htmlFor={id} className="mb-2 block text-sm font-semibold">Category</label><select id={id} value={value} onChange={event=>onChange(event.target.value as TaskCategory)} className="w-full rounded-2xl border border-input bg-background px-4 py-3 text-sm outline-none focus:border-primary">{TASK_CATEGORIES.map(category=><option key={category.value} value={category.value}>{category.label}</option>)}</select></div>; }
+export function categoryLabel(value?: TaskCategory) { return TASK_CATEGORIES.find(category=>category.value===value)?.label ?? "General"; }

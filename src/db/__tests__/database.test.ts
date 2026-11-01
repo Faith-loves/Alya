@@ -10,10 +10,11 @@ beforeEach(async () => { if (!db.isOpen()) await db.open(); await Promise.all(ta
 
 describe("AlyaPersonalDB", () => {
   it("creates, reads, edits and deletes a task", async () => {
-    const task = await createTask({ title: "Write a kind plan", priority: "high", dueDate: "2026-11-02" });
+    const task = await createTask({ title: "Write a kind plan", priority: "high", category: "career", dueDate: "2026-11-02" });
     expect((await getTask(task.id))?.title).toBe("Write a kind plan");
-    const updated = await updateTask(task.id, { status: "completed" });
+    const updated = await updateTask(task.id, { status: "completed", category: "personal" });
     expect(updated?.status).toBe("completed");
+    expect(updated?.category).toBe("personal");
     expect(updated?.updatedAt).not.toBe(task.updatedAt);
     await deleteTask(task.id);
     expect(await getTask(task.id)).toBeUndefined();
@@ -35,6 +36,7 @@ describe("AlyaPersonalDB", () => {
   });
   it("rejects invalid input and date-only values", () => {
     expect(() => parseTaskInput({ title: "", dueDate: "tomorrow" })).toThrow();
-    expect(() => parseTaskInput({ title: "Valid", dueDate: "2026-11-02" })).not.toThrow();
+    expect(() => parseTaskInput({ title: "Valid", category: "health", dueDate: "2026-11-02" })).not.toThrow();
+    expect(() => parseTaskInput({ title: "Invalid category", category: "random" })).toThrow();
   });
 });

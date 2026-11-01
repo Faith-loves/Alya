@@ -1,8 +1,9 @@
 export type TaskStatus = "todo" | "in-progress" | "completed" | "cancelled";
 export type TaskPriority = "low" | "medium" | "high";
+export type TaskCategory = "personal" | "work" | "career" | "study" | "health" | "faith" | "errands" | "other";
 export type ApplicationStatus = "applied" | "screening" | "assessment" | "interview" | "offer" | "rejected" | "withdrawn";
 
-export interface Task { id: string; title: string; description?: string; status: TaskStatus; priority: TaskPriority; dueDate?: string; scheduledDate?: string; completedAt?: string; completed?: boolean; createdAt: string; updatedAt: string; }
+export interface Task { id: string; title: string; description?: string; category?: TaskCategory; status: TaskStatus; priority: TaskPriority; dueDate?: string; scheduledDate?: string; completedAt?: string; completed?: boolean; createdAt: string; updatedAt: string; }
 export interface TimeBlock { id: string; title: string; taskId?: string; startAt: string; endAt: string; createdAt: string; updatedAt: string; }
 export interface JobApplication { id: string; company: string; role: string; location?: string; workMode?: string; applicationUrl?: string; url?: string; status: ApplicationStatus; appliedDate?: string; followUpDate?: string; salaryNotes?: string; notes?: string; createdAt: string; updatedAt: string; }
 export interface ApplicationEvent { id: string; applicationId: string; eventType: string; eventDate: string; notes?: string; createdAt: string; updatedAt: string; }
