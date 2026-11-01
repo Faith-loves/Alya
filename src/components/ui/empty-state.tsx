@@ -1,0 +1,2 @@
+import { Sparkles } from "lucide-react";
+export function EmptyState({ title, description }: { title: string; description: string }) { return <div className="rounded-3xl border border-dashed border-border bg-card/50 px-6 py-10 text-center"><Sparkles className="mx-auto mb-3 text-primary" size={24}/><h3 className="font-bold">{title}</h3><p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">{description}</p></div>; }

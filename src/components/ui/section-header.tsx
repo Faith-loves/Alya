@@ -1,0 +1,2 @@
+import { cn } from "@/lib/utils";
+export function SectionHeader({ eyebrow, title, action, className }: { eyebrow?: string; title: string; action?: React.ReactNode; className?: string }) { return <div className={cn("mb-5 flex items-end justify-between gap-4", className)}><div>{eyebrow&&<p className="mb-1 text-xs font-bold uppercase tracking-[.16em] text-primary">{eyebrow}</p>}<h2 className="text-xl font-bold tracking-tight">{title}</h2></div>{action}</div>; }
