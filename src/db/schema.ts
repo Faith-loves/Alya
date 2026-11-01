@@ -1,0 +1,15 @@
+export const ALYA_SCHEMA = {
+  tasks: "id, status, priority, dueDate, scheduledDate, createdAt, updatedAt",
+  timeBlocks: "id, taskId, startAt, endAt, createdAt, updatedAt",
+  jobApplications: "id, status, appliedDate, followUpDate, company, createdAt, updatedAt",
+  applicationEvents: "id, applicationId, eventType, eventDate, createdAt",
+  profileAnswers: "id, category, createdAt, updatedAt",
+  waterLogs: "id, localDate, loggedAt, createdAt",
+  cycles: "id, startDate, endDate, createdAt, updatedAt",
+  prayerLogs: "id, localDate, prayerType, createdAt, updatedAt",
+  checklists: "id, title, createdAt, updatedAt",
+  checklistItems: "id, checklistId, sortOrder, createdAt, updatedAt",
+  habits: "id, active, createdAt, updatedAt",
+  habitLogs: "id, habitId, localDate, createdAt",
+  settings: "&key, updatedAt",
+} as const;
