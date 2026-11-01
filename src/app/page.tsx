@@ -1,4 +1,3 @@
-import { AppShell } from "@/components/layout/app-shell";
-import { Today } from "@/features/dashboard/today";
+import { redirect } from "next/navigation";
 
-export default function Home() { return <AppShell><Today /></AppShell>; }
+export default function Home() { redirect("/today"); }
