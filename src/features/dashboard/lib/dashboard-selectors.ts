@@ -1,0 +1,8 @@
+import type { ApplicationStatus, JobApplication, Task, TimeBlock, WaterLog } from "@/db/types";
+export function isTaskComplete(task: Task) { return task.status === "completed" || task.completed === true; }
+export function selectTodayTasks(tasks: Task[], localDate: string) { return tasks.filter(task => task.dueDate === localDate || task.scheduledDate === localDate); }
+export function sortPriorityTasks(tasks: Task[]) { const weights = { high: 0, medium: 1, low: 2 }; return [...tasks].sort((a,b) => Number(isTaskComplete(a)) - Number(isTaskComplete(b)) || weights[a.priority] - weights[b.priority] || (a.createdAt < b.createdAt ? -1 : 1)); }
+export function taskStats(tasks: Task[]) { const completed = tasks.filter(isTaskComplete).length; return { total: tasks.length, completed, pending: tasks.length - completed, percentage: tasks.length ? Math.round((completed / tasks.length) * 100) : 0 }; }
+export function selectTodayBlocks(blocks: TimeBlock[], localDate: string) { return blocks.filter(block => block.startAt.slice(0, 10) === localDate || block.endAt.slice(0, 10) === localDate).sort((a,b) => a.startAt.localeCompare(b.startAt)); }
+export function selectFollowUps(applications: JobApplication[], localDate: string) { const terminal = new Set<ApplicationStatus>(["rejected", "withdrawn"]); const actionable = applications.filter((app): app is JobApplication & { followUpDate: string } => { const date = app.followUpDate; if (!date) return false; return date <= localDate && !terminal.has(app.status); }); return actionable.sort((a,b) => a.followUpDate.localeCompare(b.followUpDate)); }
+export function waterTotal(logs: WaterLog[], localDate: string) { return logs.filter(log => log.localDate === localDate).reduce((sum, log) => sum + log.amountMl, 0); }

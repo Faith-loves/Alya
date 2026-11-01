@@ -1,0 +1,10 @@
+import { describe, expect, it } from "vitest";
+import type { JobApplication, Task, WaterLog } from "@/db/types";
+import { selectFollowUps, selectTodayTasks, sortPriorityTasks, taskStats, waterTotal } from "../lib/dashboard-selectors";
+const task = (id: string, overrides: Partial<Task> = {}): Task => ({ id, title: id, status: "todo", priority: "medium", createdAt: `2026-11-01T00:00:0${id.length}Z`, updatedAt: "2026-11-01T00:00:00Z", ...overrides });
+describe("today dashboard selectors", () => {
+  it("filters by the user's local calendar date", () => { expect(selectTodayTasks([task("today", { dueDate: "2026-11-01" }), task("tomorrow", { dueDate: "2026-11-02" }), task("scheduled", { scheduledDate: "2026-11-01" })], "2026-11-01").map(item=>item.id)).toEqual(["today", "scheduled"]); });
+  it("sorts incomplete high priorities first and calculates empty stats safely", () => { const tasks=[task("low", {priority:"low"}), task("high", {priority:"high"}), task("done", {status:"completed", priority:"high"})]; expect(sortPriorityTasks(tasks).map(item=>item.id)).toEqual(["high","low","done"]); expect(taskStats([])).toEqual({total:0,completed:0,pending:0,percentage:0}); expect(taskStats(tasks)).toEqual({total:3,completed:1,pending:2,percentage:33}); });
+  it("includes overdue actionable follow-ups but excludes terminal applications", () => { const base={id:"1",company:"A",role:"Role",status:"applied" as const,followUpDate:"2026-10-31",createdAt:"2026-11-01T00:00:00Z",updatedAt:"2026-11-01T00:00:00Z"}; const rejected: JobApplication={...base,id:"2",status:"rejected"}; expect(selectFollowUps([base,rejected],"2026-11-01").map(item=>item.id)).toEqual(["1"]); });
+  it("totals only water logged on the requested local date", () => { const logs: WaterLog[]=[{id:"1",amountMl:500,localDate:"2026-11-01",loggedAt:"2026-11-01T08:00:00Z",createdAt:"2026-11-01T08:00:00Z"},{id:"2",amountMl:250,localDate:"2026-11-02",loggedAt:"2026-11-02T08:00:00Z",createdAt:"2026-11-02T08:00:00Z"}]; expect(waterTotal(logs,"2026-11-01")).toBe(500); });
+});
